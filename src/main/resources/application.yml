@@ -1,0 +1,28 @@
+spring:
+  cache:
+    type: jcache
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=3600s
+
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets
+      url: /stringinate*
+      strategy: first
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"message\": \"You have exhausted your API Request Quota\" }"
+      rate-limits:
+        - bandwidths:
+            - capacity: 5
+              time: 10
+              unit: seconds
+              fixed-refill-interval: 1
+              fixed-refill-interval-unit: seconds
+        - expression: "getRemoteAddress()"
+server:
+  port: 8090
+  tomcat:
+    relaxed-query-chars: '|,{,},[,]'
