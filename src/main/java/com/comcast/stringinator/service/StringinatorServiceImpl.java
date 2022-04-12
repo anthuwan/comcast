@@ -4,6 +4,7 @@ import com.comcast.stringinator.model.StatsResult;
 import com.comcast.stringinator.model.StringinatorInput;
 import com.comcast.stringinator.model.StringinatorResult;
 import com.comcast.stringinator.util.Utils;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,7 +17,7 @@ public class StringinatorServiceImpl implements StringinatorService {
   private Map<String, Integer> seenStrings = new HashMap<>();
   String mostPopular = null;
   String longestInput = null;
-
+  String filename = "src/main/resources/data.txt";
   @Override
   public StringinatorResult stringinate(StringinatorInput input) {
     seenStrings.compute(input.getInput(), (k, v) -> (v == null) ? 1 : v + 1);
@@ -27,7 +28,7 @@ public class StringinatorServiceImpl implements StringinatorService {
   }
 
   @Override
-  public StatsResult stats() {
+  public StatsResult stats() throws IOException {
     Optional<Entry<String, Integer>> optionalInput1 =
         seenStrings.entrySet().stream()
             .max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1);
@@ -36,6 +37,12 @@ public class StringinatorServiceImpl implements StringinatorService {
             .max((entry1, entry2) -> entry1.getKey().length() > entry2.getKey().length() ? 1 : -1);
     optionalInput1.ifPresent(stringIntegerEntry -> mostPopular = stringIntegerEntry.getKey());
     optionalInput2.ifPresent(stringIntegerEntry -> longestInput = stringIntegerEntry.getKey());
-    return new StatsResult(seenStrings, mostPopular, longestInput);
+
+
+    StatsResult statsResult=new StatsResult(seenStrings, mostPopular, longestInput);
+    if (optionalInput1.isPresent()) {
+      Utils.saveFile(statsResult.getInputs(), filename);
+    }
+    return statsResult;
   }
 }

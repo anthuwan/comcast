@@ -5,6 +5,7 @@ import com.comcast.stringinator.model.StringinatorInput;
 import com.comcast.stringinator.model.StringinatorResult;
 import com.comcast.stringinator.service.StringinatorService;
 import com.comcast.stringinator.util.Utils;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class StringinatorController {
   }
 
   @GetMapping(path = "/stats")
-  public ResponseEntity<StatsResult> stats() {
+  public ResponseEntity<StatsResult> stats() throws IOException {
     log.info("Request Started for stats Get");
     HttpStatus httpStatus = HttpStatus.OK;
     return new ResponseEntity<>(stringinatorService.stats(),httpStatus);

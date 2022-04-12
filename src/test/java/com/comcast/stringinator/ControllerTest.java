@@ -10,6 +10,7 @@ import com.comcast.stringinator.model.StringinatorInput;
 import com.comcast.stringinator.model.StringinatorResult;
 import com.comcast.stringinator.service.StringinatorService;
 import com.comcast.stringinator.util.Utils;
+import java.io.IOException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -41,7 +42,7 @@ public class ControllerTest {
   }
 
   @Test
-  public void getStats() {
+  public void getStats() throws IOException {
     ResponseEntity<StatsResult> statsResult =
         stringinatorController.stats();
     assertThat(statsResult.getStatusCode().value(), is(HttpStatus.OK.value()));
