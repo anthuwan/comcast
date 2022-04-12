@@ -35,6 +35,7 @@ public class StringinatorController {
   @GetMapping(path = "/stringinate", produces = "application/json")
   public ResponseEntity<StringinatorResult> stringinateGet(
       @RequestParam(name = "input", required = true) String input) {
+    log.info("Request Started for stringinate Get");
     HttpStatus httpStatus = HttpStatus.OK;
     return new ResponseEntity<>(
         stringinatorService.stringinate(
@@ -45,12 +46,15 @@ public class StringinatorController {
 
   @PostMapping(path = "/stringinate", consumes = "application/json", produces = "application/json")
   public ResponseEntity<StringinatorResult> stringinate(@RequestBody StringinatorInput input) {
+    log.info("Request Started for stringinate POST");
     HttpStatus httpStatus = HttpStatus.OK;
     return new ResponseEntity<>(stringinatorService.stringinate(input), httpStatus);
   }
 
   @GetMapping(path = "/stats")
-  public StatsResult stats() {
-    return stringinatorService.stats();
+  public ResponseEntity<StatsResult> stats() {
+    log.info("Request Started for stats Get");
+    HttpStatus httpStatus = HttpStatus.OK;
+    return new ResponseEntity<>(stringinatorService.stats(),httpStatus);
   }
 }

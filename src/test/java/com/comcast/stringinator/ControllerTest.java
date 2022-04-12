@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 import com.comcast.stringinator.controller.StringinatorController;
+import com.comcast.stringinator.model.StatsResult;
 import com.comcast.stringinator.model.StringinatorInput;
 import com.comcast.stringinator.model.StringinatorResult;
 import com.comcast.stringinator.service.StringinatorService;
@@ -37,6 +38,13 @@ public class ControllerTest {
     ResponseEntity<StringinatorResult> stringinatorResult =
         stringinatorController.stringinate(stringinatorInput());
     assertThat(stringinatorResult.getStatusCode().value(), is(HttpStatus.OK.value()));
+  }
+
+  @Test
+  public void getStats() {
+    ResponseEntity<StatsResult> statsResult =
+        stringinatorController.stats();
+    assertThat(statsResult.getStatusCode().value(), is(HttpStatus.OK.value()));
   }
 
   public StringinatorResult stringinatorResult() {

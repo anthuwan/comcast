@@ -23,6 +23,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/CITATIONS.md">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/NOTES.md">
           <value>
             <set />
@@ -274,6 +279,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/com/comcast/stringinator/ControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/com/comcast/stringinator/GlobalExceptionHandlerTest.java">
           <value>
             <set />
           </value>

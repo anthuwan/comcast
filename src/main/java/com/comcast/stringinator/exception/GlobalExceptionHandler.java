@@ -3,10 +3,13 @@ package com.comcast.stringinator.exception;
 import com.comcast.stringinator.model.ErrorResponse;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,6 +18,31 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+  @ExceptionHandler
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<Object> handleMethodArgumentNotValidException(
+      MethodArgumentNotValidException ex) {
+    log.error("inside  handleMethodArgumentNotValidException", ex);
+    String errorMessage =
+        ex.getBindingResult().getFieldErrors().stream()
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+            .findAny()
+            .orElse(ex.getMessage());
+    ErrorResponse errorResponse = buildErrorResponse(errorMessage,
+        "FAILED");
+    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<Object> handleMessageNotRead(HttpMessageNotReadableException ex) {
+    log.error("inside  handleMessageNotRead", ex);
+    ErrorResponse errorResponse = buildErrorResponse(ex.getMessage(),
+        String.valueOf(HttpStatus.BAD_REQUEST.value()));
+    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+  }
+
+
   @ExceptionHandler
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Object> handleServletRequest(ServletRequestBindingException ex) {
